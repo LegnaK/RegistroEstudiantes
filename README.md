@@ -5,7 +5,7 @@ Sencilla aplicación en Java para el manejo de estudiantes con SqLite
 
 La aplicación hace uso del sistema de gestión de base de datos SqLite 3.7.15
 
-La versión de la aplicación actual es la 1.0.0
+La versión de la aplicación actual es la 1b.0.0
 
 ===================
 

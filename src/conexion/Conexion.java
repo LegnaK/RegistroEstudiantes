@@ -32,11 +32,10 @@ public class Conexion {
 	 * 
 	 * @param rutaBaseDatos
 	 */
-	public void setRutaBaseDatos(String rutaBaseDatos){
+	public void setRutaBaseDatos(String rutaBaseDatos) {
 		this.rutaBaseDatos = rutaBaseDatos;
 	}
-	
-	
+
 	/**
 	 * Carga la conexion
 	 * 
@@ -63,7 +62,7 @@ public class Conexion {
 		} catch (SQLException xp) {
 			System.out.println("Error al crear la conexion");
 		}
-		
+
 	}
 
 	/**
@@ -78,7 +77,6 @@ public class Conexion {
 			conexion.close();
 		} catch (Exception xl) {
 			System.out.println(xl.getMessage());
-			System.out.println(xl.getStackTrace());
 
 		}
 	}
@@ -114,18 +112,17 @@ public class Conexion {
 		cargarConexion();
 		try {
 			consulta.executeUpdate(datosInsertar);
-			
+
 			cerrarConexion();
 			return true;
-			
+
 		} catch (SQLException xp) {
 			JOptionPane.showMessageDialog(null, "Error\n" + xp.getMessage(),
 					"Error!", JOptionPane.ERROR_MESSAGE);
 			System.out.println("Error ingresar");
 			return false;
-			
-		}
 
+		}
 
 	}
 
@@ -146,10 +143,11 @@ public class Conexion {
 
 	}
 
-	public boolean borrar(String datosBorrar) {
-		cargarConexion();
+	public boolean borrarTabla(String nombreTabla) {
+		
 		try {
-			consulta.executeUpdate(datosBorrar);
+			cargarConexion();
+			consulta.executeUpdate("DROP TABLE "+nombreTabla);
 			cerrarConexion();
 			return true;
 
@@ -158,59 +156,58 @@ public class Conexion {
 					"Error!", JOptionPane.ERROR_MESSAGE);
 			System.out.println("Error al borrar tabla");
 			return false;
-			
+
 		}
 
-		
 	}
 
 	public boolean crearTabla(String nombreTabla, String campos) {
 		cargarConexion();
 
 		try {
-			consulta.executeUpdate("CREATE TABLE "+nombreTabla+"("+campos+");");
+			consulta.executeUpdate("CREATE TABLE " + nombreTabla + "(" + campos
+					+ ");");
 			cerrarConexion();
 			return true;
-			
+
 		} catch (SQLException xp) {
 			xp.printStackTrace();
 			return false;
 		}
 
 	}
-	
-	public boolean tablaExiste(String nombreTabla){
-		cargarConexion();
-		
+
+	public boolean tablaExiste(String nombreTabla) {
+
 		try {
-			consulta.executeQuery("SELECT * FROM "+nombreTabla);
-			
+			cargarConexion();
+			consulta.executeQuery("SELECT * FROM " + nombreTabla);
 			cerrarConexion();
 			return true;
-					
+
 		} catch (SQLException xp) {
-			xp.printStackTrace();	
+			xp.printStackTrace();
 			return false;
 		}
-		
+
 	}
-	
-	public ArrayList<String> nombresTablas(){
-		
+
+	public ArrayList<String> nombresTablas() {
+
 		cargarConexion();
-		
+
 		try {
 			DatabaseMetaData metaDatos = conexion.getMetaData();
-			
+
 			ResultSet resultado = metaDatos.getTables(null, null, "%", null);
-			
-			ArrayList <String> nombres = new ArrayList<String>();
-			while (resultado.next()){
+
+			ArrayList<String> nombres = new ArrayList<String>();
+			while (resultado.next()) {
 				nombres.add(resultado.getString(3));
-	
+
 			}
 			return nombres;
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;

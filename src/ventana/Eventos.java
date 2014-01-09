@@ -19,7 +19,7 @@ public class Eventos {
 		this.elemento = elemento;
 
 		conexion = new Conexion();
-		conexion.setRutaBaseDatos(System.getProperty("user.dir") + "/grupos.db");
+		conexion.setRutaBaseDatos(System.getProperty("user.dir") + "/base_datos/grupos.db");
 	}
 
 	public void insertarEstudiante(String nombreGrupo, Estudiante estudiante) {
@@ -95,7 +95,8 @@ public class Eventos {
 	 * Borrar todas las tablas
 	 */
 	public void borrarGrupos(String nombreGrupo) {
-		if(conexion.borrar("DROP TABLE "+nombreGrupo)){
+		
+		if(conexion.borrarTabla(nombreGrupo)){
 			JOptionPane.showMessageDialog(null, "Grupo eliminado correctamente");
 		
 		} else {
@@ -105,7 +106,7 @@ public class Eventos {
 	}
 	
 	public void borrarEstudiante(){
-		if(conexion.borrar("DROP TABLE personales")){
+		if(conexion.borrarTabla("DROP TABLE personales")){
 			JOptionPane.showMessageDialog(null, "Grupo eliminado correctamente");
 		
 		} else {

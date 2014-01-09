@@ -15,13 +15,12 @@ import javax.swing.JTextField;
 import conexion.Conexion;
 
 public class LogeoUsuario extends JFrame implements
-		java.awt.event.ActionListener, Runnable {
+		java.awt.event.ActionListener {
 
 	private JLabel jlbl_usuario;
 	private JLabel jlbl_contra;
 	private JTextField jtxt_usuario;
 	private JPasswordField jpss_contra;
-	private JTextField jtxt_contra;
 
 	private JButton jbtn_ingresar;
 	private JButton jbtn_limpiar;
@@ -37,7 +36,7 @@ public class LogeoUsuario extends JFrame implements
 
 		conexion = new Conexion();
 		// System.out.println(System.getProperty("user.dir") + "\\login.db");
-		conexion.setRutaBaseDatos(System.getProperty("user.dir") + "/login.db");
+		conexion.setRutaBaseDatos(System.getProperty("user.dir") + "/base_datos/login.db");
 
 		jlbl_usuario = new JLabel("Usuario:");
 		jlbl_usuario.setBounds(5, 5, 120, 20);
@@ -93,12 +92,13 @@ public class LogeoUsuario extends JFrame implements
 					return false;
 
 				} else {
-					if (resultado.getString("usuario").equals(usuario)
-							& Arrays.equals(contra, passCorrecto)) {
-
-						resultado.close();
+					if (resultado.getString("usuario").equals(usuario)) {
+						
+						if (Arrays.equals(contra, passCorrecto)){
+							resultado.close();
 
 						return true;
+						}
 
 					}
 				}
@@ -121,23 +121,24 @@ public class LogeoUsuario extends JFrame implements
 	public void actionPerformed(ActionEvent xp) {
 		if (xp.getSource() == jbtn_ingresar) {
 
-			if (jtxt_usuario.getText().length() > 0
-					& jpss_contra.getPassword().length > 0) {
+			if (jtxt_usuario.getText().length() > 0) {
 
-				if (verificarLogin(jtxt_usuario.getText(),
-						jpss_contra.getPassword())) {
+				if (jpss_contra.getPassword().length > 0){
+					if (verificarLogin(jtxt_usuario.getText(),
+							jpss_contra.getPassword())) {
 
-					Ventana ventana = new Ventana();
-					setVisible(false);
-					ventana.setVisible(true);
+						Ventana ventana = new Ventana();
+						setVisible(false);
+						ventana.setVisible(true);
 
-				} else {
-					JOptionPane
-							.showMessageDialog(
-									this,
-									"El nombre de usuario y/o contraseña son incorrectos!",
-									"Error!", JOptionPane.ERROR_MESSAGE);
-					jpss_contra.setText(null);
+					} else {
+						JOptionPane
+								.showMessageDialog(
+										this,
+										"El nombre de usuario y/o contraseña son incorrectos!",
+										"Error!", JOptionPane.ERROR_MESSAGE);
+						jpss_contra.setText(null);
+					}
 				}
 
 			} else
@@ -145,22 +146,28 @@ public class LogeoUsuario extends JFrame implements
 						"Debe ingresar el nombre de usuario y contraseña");
 
 		} else if (xp.getSource() == jbtn_limpiar) {
-			jtxt_usuario.setText(null);
-			jtxt_contra.setText(null);
-
+			setText_usuario("");
+			setPass_contra("");
 		}
 	}
 
 	/* ------------------------------------ */
 
+	public void setText_usuario(String usuario){
+		this.jtxt_usuario.setText(usuario);
+	}
+
+	public void setPass_contra(String contra){
+		this.jpss_contra.setText(contra);
+	}	
+	
+	/* ------------------------------------ */
+	
+	
 	public static void main(String[] ahk) {
 		LogeoUsuario logeo = new LogeoUsuario();
 		logeo.setVisible(true);
 	}
 
-	@Override
-	public void run() {
-
-	}
-
+	
 }
